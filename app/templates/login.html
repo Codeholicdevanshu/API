@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Login Form</h1>
+    <div class="error">
+
+    </div>
+    <form  id="loginform">
+        {% csrf_token %}
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email"><br><br>
+    
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br><br>
+    
+            <button type="submit">Submit</button>
+        </form>
+</body>
+<script>
+    let form = document.getElementById('loginform');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // getting form value
+        let email = form.elements['email'].value;
+        let password = form.elements['password'].value;
+
+        // performing validation
+        if (email.trim() === '') {
+            alert('email field is required');
+        }
+
+        if (password.trim() === '') {
+            alert('password is required');
+        }
+
+        const formData = new FormData(form);
+
+        // fetching form data from frontend using
+        fetch('http://127.0.0.1:8000/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "email": email,
+                "password": password,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    let token = data;
+                    let tokenString = JSON.stringify(token);
+
+                    // Store the token in local storage
+                    localStorage.setItem("token", tokenString);
+                    //console.log(tokenString); // Check whether token is received or not
+
+                    // Retrieve the token from local storage
+                    let storedTokenString = localStorage.getItem("token");
+                    let storedToken = JSON.parse(storedTokenString);
+                    console.log(storedToken); // Output: token
+
+                    // Send the token to the server for user authentication
+                    let xhr = new XMLHttpRequest();
+                    let url = 'http://127.0.0.1:8000/api/login';
+
+                    // Send the token in the request body as JSON
+                    xhr.open("POST", url);
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.send(JSON.stringify({ token: storedToken }));
+
+                    // Handle the response from the server
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            // User authentication successful
+                            document.querySelector('.error').innerHTML = "Successfully Login";
+                            //location.href = 'base';
+                        } else {
+                            // User authentication failed
+                            document.querySelector('.error').innerHTML = "User authentication failed";
+                            // Handle error or redirect to an error page
+                        }
+                    };
+                } else {
+                    document.querySelector('.error').innerHTML = "User not defined";
+                }
+            });
+    });
+</script>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<div id="error">
+
+</div>
+    <form  id="myForm">
+    {% csrf_token %}
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname"><br><br>
+
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname" ><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email"><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+<script>
+    let form = document.getElementById('myForm');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        //getting values from forms
+        let firstname = form.elements['firstname'].value
+        let lastname = form.elements['lastname'].value
+        let email = form.elements['email'].value
+        let password = form.elements['password'].value
+        
+        //perform validations before submitting 
+        if (firstname.trim() === '') {
+            alert('Please enter your firstname');
+            return;}
+
+        if (lastname.trim() === '') {
+            alert('Please enter your lastname');
+            return;
+        }
+
+        if (email.trim() === '') {
+            alert('Please enter your email');
+            return;
+        }
+
+        if (password.trim() === '') {
+            alert('Please enter your password');
+            return;
+        }
+
+    
+        const formData = new FormData(form); 
+
+        // You can send the form data to the Django API using the fetch API or other methods
+
+        // Example using fetch:
+
+        fetch('http://127.0.0.1:8000/api/register', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (response.ok) {
+                // Handle successful response
+                alert('user register successfully')
+                window.location.href= 'login';
+
+            } else{
+                // Handle error response
+                alert('invalid credientials');
+            }
+        })
+    });
+
+</script>
+</html>
