@@ -24,59 +24,59 @@
     </form>
 </body>
 <script>
-    let form = document.getElementById('myForm');
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        //getting values from forms
-        let firstname = form.elements['firstname'].value
-        let lastname = form.elements['lastname'].value
-        let email = form.elements['email'].value
-        let password = form.elements['password'].value
-        
-        //perform validations before submitting 
-        if (firstname.trim() === '') {
-            alert('Please enter your firstname');
-            return;}
+let form = document.getElementById('myForm');
 
-        if (lastname.trim() === '') {
-            alert('Please enter your lastname');
-            return;
-        }
-
-        if (email.trim() === '') {
-            alert('Please enter your email');
-            return;
-        }
-
-        if (password.trim() === '') {
-            alert('Please enter your password');
-            return;
-        }
-
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    //getting values from forms
+    let firstname = form.elements['firstname'].value
+    let lastname = form.elements['lastname'].value
+    let email = form.elements['email'].value
+    let password = form.elements['password'].value
     
-        const formData = new FormData(form); 
+    //perform validations before submitting 
+    if (firstname.trim() === '') {
+        alert('Please enter your firstname');
+        return;}
 
-        // You can send the form data to the Django API using the fetch API or other methods
+    if (lastname.trim() === '') {
+        alert('Please enter your lastname');
+        return;
+    }
 
-        // Example using fetch:
+    if (email.trim() === '') {
+        alert('Please enter your email');
+        return;
+    }
 
-        fetch('http://127.0.0.1:8000/api/register', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => {
-            if (response.ok) {
-                // Handle successful response
-                alert('user register successfully')
-                window.location.href= 'login';
+    if (password.trim() === '') {
+        alert('Please enter your password');
+        return;
+    }
 
-            } else{
-                // Handle error response
-                alert('invalid credientials');
-            }
-        })
-    });
 
+    const formData = new FormData(form); 
+
+    // You can send the form data to the Django API using the fetch API or other methods
+
+    // Example using fetch:
+
+    fetch('http://127.0.0.1:8000/api/register', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        if (response.ok) {
+            // Handle successful response
+            alert('user register successfully')
+            window.location.href= 'login';
+
+        } else{
+            // Handle error response
+            alert('invalid credientials');
+        }
+    })
+});
 </script>
 </html>
